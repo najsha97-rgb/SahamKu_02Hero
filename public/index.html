@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#dce9fb">
+<meta name="theme-color" content="#f8e8b8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SahamKu 02Hero</title>
+<title>SAHAMKU-02HERO</title>
 <script>
 try {
   const preference = localStorage.getItem('sahamku-theme');
@@ -34,7 +34,7 @@ button{border:1px solid #669083;background:#f5faf7;color:var(--ink);border-radiu
 :root {
   color-scheme: light;
   --ink:#111a2d; --paper:#eef3f9; --line:#c5d4e5;
-  --top:#dce9fb; --sidebar:#e7f2ef; --reader:#fff; --text:#26364c; --muted:#465974;
+  --top:#f8e8b8; --sidebar:#e7f2ef; --reader:#fff; --text:#26364c; --muted:#465974;
   --field:#e4edf8; --field-border:#aabdd3; --selection:#deeffa;
   --accent:#9b6400; --focus:#086f9f; --action:#f6e5a8; --action-ink:#302100;
   --status:#116450; --shadow:#17395712; --heading-line:#d9af52;
@@ -42,7 +42,7 @@ button{border:1px solid #669083;background:#f5faf7;color:var(--ink);border-radiu
 :root[data-theme=dark] {
   color-scheme: dark;
   --ink:#f2f6ff; --paper:#0a0f19; --line:#26415b;
-  --top:#22234a; --sidebar:#102b33; --reader:#101a2e; --text:#d7e1f2; --muted:#aabbd5;
+  --top:#d9ccff; --sidebar:#102b33; --reader:#101a2e; --text:#d7e1f2; --muted:#aabbd5;
   --field:#19243a; --field-border:#456282; --selection:#13364d;
   --accent:#ffd453; --focus:#72d6ff; --action:#f4c333; --action-ink:#211600;
   --status:#67e7bd; --shadow:#0005; --heading-line:#67c8ef;
@@ -147,10 +147,16 @@ button[aria-pressed=true]{background:var(--action);color:var(--action-ink);borde
  }
 }
 @media(forced-colors:active){#menu .main-topic:is(:hover,:focus-visible,:active),#collection summary:is(:hover,:focus-visible,:active) .main-topic{background-image:none;color:LinkText}}
+header{color:#221c3e;border-bottom-color:#a998ce}
+header strong{font-size:clamp(1.22rem,3vw,1.55rem);letter-spacing:.045em}
+header small{color:#493c58;font-size:.9rem}
+header #status{color:#0c594b}
+header .header-actions button{background:#ffffffad;border-color:#8977a2;color:#292041}
+header .header-actions button:focus-visible{outline-color:#5b20a7}
 </style>
 </head>
 <body>
-<header><div><strong>SahamKu 02Hero</strong><small>Pelaburan saham, carta dan pasaran</small></div><div class="header-actions"><button id="theme" type="button"><span id="theme-icon" aria-hidden="true"></span><span id="theme-label"></span></button><button id="menubtn" aria-controls="menu" aria-expanded="false">Isi kandungan</button></div><span id="status" role="status" hidden></span></header>
+<header><div><strong>SAHAMKU-02HERO</strong><small>Asas Pelaburan Saham, Pasaran Malaysia, USA+Kripto</small></div><div class="header-actions"><button id="theme" type="button"><span id="theme-icon" aria-hidden="true"></span><span id="theme-label"></span></button><button id="menubtn" aria-controls="menu" aria-expanded="false">Isi kandungan</button></div><span id="status" role="status" hidden></span></header>
 <div class="shell">
 <aside id="menu" data-open="false">
 <strong id="collection-label">Pilih nota</strong>
@@ -178,7 +184,7 @@ function save(key, value) {
 function setTheme(theme) {
   const dark = theme === 'dark';
   document.documentElement.dataset.theme = theme;
-  document.querySelector('meta[name=theme-color]').content = dark ? '#22234a' : '#dce9fb';
+  document.querySelector('meta[name=theme-color]').content = dark ? '#d9ccff' : '#f8e8b8';
   el('theme-icon').textContent = dark ? '☀' : '☾';
   el('theme-label').textContent = dark ? 'Tema cerah' : 'Tema gelap';
 }

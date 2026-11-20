@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#fbfcfe">
+<meta name="theme-color" content="#dce9fb">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>SahamKu 02Hero</title>
@@ -34,7 +34,7 @@ button{border:1px solid #669083;background:#f5faf7;color:var(--ink);border-radiu
 :root {
   color-scheme: light;
   --ink:#111a2d; --paper:#eef3f9; --line:#c5d4e5;
-  --surface:#fbfcfe; --reader:#fff; --text:#26364c; --muted:#465974;
+  --top:#dce9fb; --sidebar:#e7f2ef; --reader:#fff; --text:#26364c; --muted:#465974;
   --field:#e4edf8; --field-border:#aabdd3; --selection:#deeffa;
   --accent:#9b6400; --focus:#086f9f; --action:#f6e5a8; --action-ink:#302100;
   --status:#116450; --shadow:#17395712; --heading-line:#d9af52;
@@ -42,19 +42,19 @@ button{border:1px solid #669083;background:#f5faf7;color:var(--ink);border-radiu
 :root[data-theme=dark] {
   color-scheme: dark;
   --ink:#f2f6ff; --paper:#0a0f19; --line:#26415b;
-  --surface:#111a2c; --reader:#0e182c; --text:#d7e1f2; --muted:#aabbd5;
+  --top:#22234a; --sidebar:#102b33; --reader:#101a2e; --text:#d7e1f2; --muted:#aabbd5;
   --field:#19243a; --field-border:#456282; --selection:#13364d;
   --accent:#ffd453; --focus:#72d6ff; --action:#f4c333; --action-ink:#211600;
   --status:#67e7bd; --shadow:#0005; --heading-line:#67c8ef;
 }
 body{color:var(--text)}
-header{background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line);box-shadow:0 4px 14px var(--shadow);flex-wrap:wrap}
+header{background:var(--top);color:var(--ink);border-bottom:1px solid var(--line);box-shadow:0 4px 14px var(--shadow);flex-wrap:wrap}
 header small{color:var(--muted)}
 .header-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
 #theme{display:inline-flex;align-items:center;gap:.4rem;min-height:44px}
 #status{color:var(--status);flex-basis:100%}
 aside,main{box-shadow:0 6px 20px var(--shadow)}
-aside{background:var(--surface)}
+aside{background:var(--sidebar)}
 main{background:var(--reader)}
 input,button{background:var(--field);border-color:var(--field-border);color:var(--ink)}
 input::placeholder{color:var(--muted)}
@@ -92,7 +92,7 @@ function save(key, value) {
 function setTheme(theme) {
   const dark = theme === 'dark';
   document.documentElement.dataset.theme = theme;
-  document.querySelector('meta[name=theme-color]').content = dark ? '#111a2c' : '#fbfcfe';
+  document.querySelector('meta[name=theme-color]').content = dark ? '#22234a' : '#dce9fb';
   el('theme-icon').textContent = dark ? '☀' : '☾';
   el('theme-label').textContent = dark ? 'Tema cerah' : 'Tema gelap';
 }

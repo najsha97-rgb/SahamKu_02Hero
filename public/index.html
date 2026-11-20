@@ -128,13 +128,36 @@ button[aria-pressed=true]{background:var(--action);color:var(--action-ink);borde
 #content a{color:#075e8a;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
 :root[data-theme=dark] #content a{color:#8ad9ff}
 #content a:hover{text-decoration-thickness:2px}
+
+:root{--topic-gold:#7d5000;--topic-purple:#5b20a7;--topic-pink:#a41962}
+:root[data-theme=dark]{--topic-gold:#ffd36c;--topic-purple:#c9a0ff;--topic-pink:#ffa2d2}
+#collection{margin:.35rem 0 1rem}
+#collection summary{cursor:pointer;border:1px solid var(--field-border);border-radius:.5rem;padding:.55rem .65rem;background:var(--field);color:var(--ink);line-height:1.35;overflow-wrap:anywhere}
+#collection summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+#collection-options{margin:.35rem 0 0;padding:.3rem;list-style:none;background:var(--reader);border:1px solid var(--line);border-radius:.55rem;max-height:20rem;overflow:auto}
+#collection-options button{display:block;width:100%;min-height:44px;text-align:left;border:1px solid transparent;background:transparent;color:var(--ink);line-height:1.35;overflow-wrap:anywhere}
+#collection-options button[aria-pressed=true]{background:var(--selection);border-color:var(--line)}
+#menu .main-topic{color:var(--topic-gold);font-weight:700}
+#menu .main-topic:is(:hover,:focus-visible,:active),#collection summary:is(:hover,:focus-visible,:active) .main-topic{color:var(--topic-purple)}
+@supports (background-clip:text){
+ #menu .main-topic:is(:hover,:focus-visible,:active),#collection summary:is(:hover,:focus-visible,:active) .main-topic{
+  background-image:linear-gradient(100deg,var(--topic-purple),var(--topic-pink));
+  background-clip:text;
+  color:transparent;
+ }
+}
+@media(forced-colors:active){#menu .main-topic:is(:hover,:focus-visible,:active),#collection summary:is(:hover,:focus-visible,:active) .main-topic{background-image:none;color:LinkText}}
 </style>
 </head>
 <body>
 <header><div><strong>SahamKu 02Hero</strong><small>Pelaburan saham, carta dan pasaran</small></div><div class="header-actions"><button id="theme" type="button"><span id="theme-icon" aria-hidden="true"></span><span id="theme-label"></span></button><button id="menubtn" aria-controls="menu" aria-expanded="false">Isi kandungan</button></div><span id="status" role="status" hidden></span></header>
 <div class="shell">
 <aside id="menu" data-open="false">
-<label for="collection">Pilih nota</label><select id="collection" style="width:100%;font:inherit;margin:.35rem 0 1rem;padding:.5rem;background:var(--field);color:var(--ink);border:1px solid var(--field-border);border-radius:.5rem"><option value="">Semua nota</option></select><label for="search">Cari dalam nota</label><input id="search" type="search" placeholder="Contoh: IPO, dividen atau portfolio">
+<strong id="collection-label">Pilih nota</strong>
+<details id="collection">
+  <summary aria-labelledby="collection-label collection-choice"><span id="collection-choice">Semua nota</span></summary>
+  <ul id="collection-options" aria-label="Pilihan nota"></ul>
+</details><label for="search">Cari dalam nota</label><input id="search" type="search" placeholder="Contoh: IPO, dividen atau portfolio">
 <div id="progress" role="status"></div><nav id="links" aria-label="Isi kandungan"></nav>
 </aside>
 <main id="reader" tabindex="-1">
@@ -173,23 +196,55 @@ for (const section of sections) {
 const completed = new Set(read('sahamku-completed', []));
 let index = 0;
 let group = '';
+let selectedCollection = '';
+const collection = el('collection');
+function addCollection(id, title) {
+  const item = document.createElement('li');
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.dataset.collectionId = id;
+  button.classList.toggle('main-topic', Boolean(id));
+  button.textContent = title;
+  button.setAttribute('aria-pressed', String(id === selectedCollection));
+  button.addEventListener('click', () => {
+    selectedCollection = id;
+    el('collection-choice').textContent = title;
+    el('collection-choice').classList.toggle('main-topic', Boolean(id));
+    for (const option of el('collection-options').querySelectorAll('button')) {
+      option.setAttribute('aria-pressed', String(option.dataset.collectionId === id));
+    }
+    collection.open = false;
+    collection.querySelector('summary').focus();
+    menu();
+  });
+  item.append(button);
+  el('collection-options').append(item);
+}
+addCollection('', 'Semua nota');
 for (const section of sections) {
   if (section.level === 1) {
     group = section.id;
-    el('collection').add(new Option(section.title, section.id));
+    addCollection(section.id, section.title);
   }
   section.group = group;
 }
-el('collection').addEventListener('change', menu);
+collection.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || !collection.open) return;
+  collection.open = false;
+  collection.querySelector('summary').focus();
+});
+document.addEventListener('pointerdown', event => {
+  if (!collection.contains(event.target)) collection.open = false;
+});
 function menu() {
   const terms = el('search').value.trim().toLocaleLowerCase('ms').split(/\s+/).filter(Boolean);
-  const found = sections.filter(section => (el('collection').value ? section.group === el('collection').value : (terms.length || section.level === 1 || section.group === sections[index].group)) && terms.every(term => section.search.includes(term)));
+  const found = sections.filter(section => (selectedCollection ? section.group === selectedCollection : (terms.length || section.level === 1 || section.group === sections[index].group)) && terms.every(term => section.search.includes(term)));
   el('progress').textContent = terms.length ? found.length + ' bahagian sepadan' : completed.size + ' daripada ' + sections.length + ' bahagian selesai';
   el('links').replaceChildren(...found.map(section => {
     const link = document.createElement('a');
     link.href = '#' + section.id;
     link.textContent = (completed.has(section.id) ? '✓ ' : '') + section.title;
-    if (section.level === 2) link.className = 'sub';
+    link.className = section.level === 1 ? 'main-topic' : 'sub';
     if (sections[index] === section) link.setAttribute('aria-current', 'location');
     link.addEventListener('click', event => { event.preventDefault(); navigate(sections.indexOf(section)); });
     return link;

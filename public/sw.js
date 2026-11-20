@@ -1,4 +1,4 @@
-const cacheName = 'sahamku-nota-v14';
+const cacheName = 'sahamku-nota-v15';
 const files = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(cacheName).then(cache => cache.addAll(files)).then(() => self.skipWaiting()));

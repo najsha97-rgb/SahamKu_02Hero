@@ -1,0 +1,9 @@
+NOTA REVISI STA UK
+
+Buka index.html untuk membaca nota melalui pelayar. Untuk menggunakan PWA pada tablet, hoskan fail dalam folder yang sama melalui HTTPS.
+
+Android: buka pautan dalam Chrome dan pilih Install app atau Add to Home screen jika tersedia.
+iPad: buka pautan dalam Safari. Pada menu Kongsi, pilih Add to Home Screen.
+Untuk penggunaan luar talian, buka aplikasi sekali ketika masih bersambung sehingga status menyatakan nota tersedia di luar talian.
+
+Untuk ujian di komputer sendiri, jalankan pelayan HTTP tempatan, contohnya python -m http.server 8000, dari folder ini. Kemudian buka http://localhost:8000.
